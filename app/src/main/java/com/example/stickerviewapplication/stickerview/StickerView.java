@@ -439,10 +439,23 @@ public class StickerView extends FrameLayout {
     }
 
     public void zoomAndRotateCurrentSticker(@NonNull MotionEvent event) {
-        zoomAndRotateSticker(handlingSticker, event);
+        zoomSticker(handlingSticker, event);
     }
 
-    public void zoomAndRotateSticker(@Nullable Sticker sticker, @NonNull MotionEvent event) {
+
+    public void zoomSticker(@Nullable Sticker sticker, @NonNull MotionEvent event) {
+        if (sticker != null) {
+            float newDistance = calculateDistance(midPoint.x, midPoint.y, event.getX(), event.getY());
+
+            moveMatrix.set(downMatrix);
+            moveMatrix.postScale(newDistance / oldDistance, newDistance / oldDistance, midPoint.x, midPoint.y);
+
+            handlingSticker.setMatrix(moveMatrix);
+        }
+    }
+
+    // TODO: Orginal Method for rotate and zoom
+/*    public void zoomAndRotateSticker(@Nullable Sticker sticker, @NonNull MotionEvent event) {
         if (sticker != null) {
             float newDistance = calculateDistance(midPoint.x, midPoint.y, event.getX(), event.getY());
             float newRotation = calculateRotation(midPoint.x, midPoint.y, event.getX(), event.getY());
@@ -453,7 +466,7 @@ public class StickerView extends FrameLayout {
             moveMatrix.postRotate(newRotation - oldRotation, midPoint.x, midPoint.y);
             handlingSticker.setMatrix(moveMatrix);
         }
-    }
+    }*/
 
     protected void constrainSticker(@NonNull Sticker sticker) {
         float moveX = 0;

@@ -7,36 +7,26 @@
     tools:context=".activities.MainActivity"
     android:orientation="vertical">
 
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="56dp"-->
-<!--        android:background="@color/black"/>-->
 
     <com.example.stickerviewapplication.stickerview.StickerView
         android:id="@+id/sticker_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_weight="1"
         app:showBorder="true"
         app:showIcons="true">
 
-<!--        <com.github.chrisbanes.photoview.PhotoView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:src="@drawable/dumbbell"-->
-<!--            android:layout_gravity="center"/>-->
-
-        <ImageView
+<!--        <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@drawable/dot_quare"
-            />
+            />-->
 
     </com.example.stickerviewapplication.stickerview.StickerView>
 
+
+<!--
 
     <Button
         android:id="@+id/next"
@@ -103,6 +93,6 @@
                 />
 
         </LinearLayout>
-    </HorizontalScrollView>
+    </HorizontalScrollView>-->
 
 </LinearLayout>

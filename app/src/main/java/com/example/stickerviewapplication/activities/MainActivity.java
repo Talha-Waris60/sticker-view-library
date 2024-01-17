@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 
 import com.example.stickerviewapplication.R;
@@ -30,10 +31,9 @@ import com.example.stickerviewapplication.stickerview.TextSticker;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-    static final String APP_TAG = "StickerView-App";
-    public static final int PERM_RQST_CODE = 110;
+    public static final String APP_TAG = "StickerView-App";
     private StickerView stickerView;
-    private TextSticker sticker;
+    private Sticker stickerPerson;
     private Button buttonNext;
 
     @Override
@@ -42,25 +42,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         stickerView = (StickerView) findViewById(R.id.sticker_view);
-        // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+       // buttonNext = findViewById(R.id.next);
 
-      //  stickerView = new StickerView(this);
-        buttonNext = findViewById(R.id.next);
-         buttonNext.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 Intent intent = new Intent(MainActivity.this, MainActivity2.class);
-                 startActivity(intent);
-             }
-         });
+        loadSticker();
+        setUpListener();
+        stickerViewIconsAndEvents();
 
+    }
+
+    // Sticker-Icons and Icon events
+    private void stickerViewIconsAndEvents() {
         //currently you can config your own icons and icon event
         //the event you can custom
-        BitmapStickerIcon deleteIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.close),
+        BitmapStickerIcon deleteIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_close),
                 BitmapStickerIcon.LEFT_TOP);
         deleteIcon.setIconEvent(new DeleteIconEvent());
 
-        BitmapStickerIcon zoomIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_zoom_in),
+        BitmapStickerIcon zoomIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_zoom),
                 BitmapStickerIcon.RIGHT_BOTOM);
         zoomIcon.setIconEvent(new ZoomIconEvent());
 
@@ -69,28 +67,29 @@ public class MainActivity extends AppCompatActivity {
                 BitmapStickerIcon.RIGHT_TOP);
         flipIcon.setIconEvent(new FlipHorizontallyEvent());
 
-        BitmapStickerIcon heartIcon =
-                new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_heart),
-                        BitmapStickerIcon.LEFT_BOTTOM);
-        heartIcon.setIconEvent(new HelloIconEvent());
+//        BitmapStickerIcon heartIcon =
+//                new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_heart),
+//                        BitmapStickerIcon.LEFT_BOTTOM);
+//        heartIcon.setIconEvent(new HelloIconEvent());
 
-        stickerView.setIcons(Arrays.asList(deleteIcon, zoomIcon, flipIcon, heartIcon));
-
-        //default icon layout
-        // stickerView.configDefaultIcons();
-
-        stickerView.setBackgroundColor(Color.WHITE);
-        stickerView.setLocked(false);
         stickerView.setConstrained(true);
 
-        sticker = new TextSticker(this);
+        stickerView.setIcons(Arrays.asList(deleteIcon, zoomIcon, flipIcon));
 
-        sticker.setDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_weightlifter));
-        sticker.setText("Hello, world!");
-        sticker.setTextColor(Color.BLACK);
-        sticker.setTextAlign(Layout.Alignment.ALIGN_CENTER);
-        sticker.resizeText();
+    }
 
+    // Click-listener
+    private void setUpListener() {
+
+ /*       buttonNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                startActivity(intent);
+            }
+        });*/
+
+        // touch listener on StickerView
         stickerView.setOnStickerOperationListener(new StickerView.OnStickerOperationListener() {
             @Override
             public void onStickerAdded(@NonNull Sticker sticker) {
@@ -111,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStickerDeleted(@NonNull Sticker sticker) {
                 Log.d(APP_TAG, "onStickerDeleted");
+
             }
 
             @Override
@@ -138,69 +138,21 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(APP_TAG, "onDoubleTapped: double tap will be with two click");
             }
         });
-
-//        if (toolbar != null) {
-//            toolbar.setTitle(R.string.app_name);
-//            toolbar.inflateMenu(R.menu.menu_save);
-//            toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-//                @Override
-//                public boolean onMenuItemClick(MenuItem item) {
-//                    if (item.getItemId() == R.id.item_save) {
-//                        File file = FileUtil.getNewFile(MainActivity.this, "Sticker");
-//                        if (file != null) {
-//                            stickerView.save(file);
-//                            Toast.makeText(MainActivity.this, "saved in " + file.getAbsolutePath(),
-//                                    Toast.LENGTH_SHORT).show();
-//                        } else {
-//                            Toast.makeText(MainActivity.this, "the file is null", Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                    //                    stickerView.replace(new DrawableSticker(
-//                    //                            ContextCompat.getDrawable(MainActivity.this, R.drawable.haizewang_90)
-//                    //                    ));
-//                    return false;
-//                }
-//            });
     }
 
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-//                != PackageManager.PERMISSION_GRANTED
-//                || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this,
-//                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERM_RQST_CODE);
-//        } else {
-//            loadSticker();
-//        }
-
-
+    // load Sticker
     private void loadSticker() {
         Drawable drawable =
                 ContextCompat.getDrawable(this, R.drawable.ic_weightlifter);
         Drawable drawable1 =
-                ContextCompat.getDrawable(this, R.drawable.ic_weightlifter);
-        stickerView.addSticker(new DrawableSticker(drawable));
-        stickerView.addSticker(new DrawableSticker(drawable1), Sticker.Position.BOTTOM | Sticker.Position.RIGHT);
+                ContextCompat.getDrawable(this, R.drawable.ic_milk_box);
+        stickerPerson = new DrawableSticker(drawable);
+        stickerView.addSticker(stickerPerson);
 
-        Drawable bubble = ContextCompat.getDrawable(this, R.drawable.ic_weightlifter);
-        stickerView.addSticker(
-                new TextSticker(getApplicationContext())
-                        .setDrawable(bubble)
-                        .setText("Sticker\n")
-                        .setMaxTextSize(14)
-                        .resizeText()
-                , Sticker.Position.TOP);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERM_RQST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            loadSticker();
-        }
-    }
-
+/*
+     TODO: Use it latter - Methods for replace, lock, reset, remove, removeAll, add Sticker
     public void testReplace(View view) {
         if (stickerView.replace(sticker)) {
             Toast.makeText(MainActivity.this, "Replace Sticker successfully!", Toast.LENGTH_SHORT).show();
@@ -240,5 +192,5 @@ public class MainActivity extends AppCompatActivity {
         sticker.resizeText();
 
         stickerView.addSticker(sticker);
-    }
+    }*/
 }

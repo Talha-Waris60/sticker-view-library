@@ -3,6 +3,8 @@ package com.example.stickerviewapplication.events;
 import android.view.MotionEvent;
 
 import com.example.stickerviewapplication.stickerview.StickerView;
+import com.example.stickerviewapplication.stickerview.StickerView.Flip;
+
 
 
 public abstract class AbstractFlipEvent implements StickerIconEvent {

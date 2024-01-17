@@ -4,7 +4,8 @@ import com.example.stickerviewapplication.stickerview.StickerView;
 
 public class FlipVerticallyEvent extends AbstractFlipEvent{
     @Override
-    protected @StickerView.Flip  int getFlipDirection() {
-        return StickerView.FLIP_VERTICALLY;;
+    @StickerView.Flip
+    protected int getFlipDirection() {
+        return StickerView.FLIP_VERTICALLY;
     }
 }

@@ -2,22 +2,19 @@ package com.example.stickerviewapplication.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Layout;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
-import com.example.stickerviewapplication.Manifest;
-import android.Manifest.permission.*;
 
 import com.example.stickerviewapplication.R;
 import com.example.stickerviewapplication.events.DeleteIconEvent;
@@ -29,49 +26,58 @@ import com.example.stickerviewapplication.stickerview.DrawableSticker;
 import com.example.stickerviewapplication.stickerview.Sticker;
 import com.example.stickerviewapplication.stickerview.StickerView;
 import com.example.stickerviewapplication.stickerview.TextSticker;
-import com.example.stickerviewapplication.util.FileUtil;
 
-import java.io.File;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
-    private static final String TAG = MainActivity.class.getSimpleName();
+    static final String APP_TAG = "StickerView-App";
     public static final int PERM_RQST_CODE = 110;
     private StickerView stickerView;
     private TextSticker sticker;
+    private Button buttonNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-       // TODO:  stickerView = (StickerView) findViewById(R.id.sticker_view);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        stickerView = (StickerView) findViewById(R.id.sticker_view);
+        // Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+      //  stickerView = new StickerView(this);
+        buttonNext = findViewById(R.id.next);
+         buttonNext.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                 startActivity(intent);
+             }
+         });
 
         //currently you can config your own icons and icon event
         //the event you can custom
-        BitmapStickerIcon deleteIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_weightlifter),
+        BitmapStickerIcon deleteIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.close),
                 BitmapStickerIcon.LEFT_TOP);
         deleteIcon.setIconEvent(new DeleteIconEvent());
 
-        BitmapStickerIcon zoomIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_weightlifter),
+        BitmapStickerIcon zoomIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_zoom_in),
                 BitmapStickerIcon.RIGHT_BOTOM);
         zoomIcon.setIconEvent(new ZoomIconEvent());
 
         BitmapStickerIcon flipIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this,
-                R.drawable.ic_weightlifter),
+                R.drawable.ic_flip),
                 BitmapStickerIcon.RIGHT_TOP);
         flipIcon.setIconEvent(new FlipHorizontallyEvent());
 
         BitmapStickerIcon heartIcon =
-                new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_weightlifter),
+                new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_heart),
                         BitmapStickerIcon.LEFT_BOTTOM);
         heartIcon.setIconEvent(new HelloIconEvent());
 
         stickerView.setIcons(Arrays.asList(deleteIcon, zoomIcon, flipIcon, heartIcon));
 
         //default icon layout
-        //stickerView.configDefaultIcons();
+        // stickerView.configDefaultIcons();
 
         stickerView.setBackgroundColor(Color.WHITE);
         stickerView.setLocked(false);
@@ -88,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
         stickerView.setOnStickerOperationListener(new StickerView.OnStickerOperationListener() {
             @Override
             public void onStickerAdded(@NonNull Sticker sticker) {
-                Log.d(TAG, "onStickerAdded");
+                Log.d(APP_TAG, "onStickerAdded");
             }
 
             @Override
@@ -99,74 +105,74 @@ public class MainActivity extends AppCompatActivity {
                     stickerView.replace(sticker);
                     stickerView.invalidate();
                 }
-                Log.d(TAG, "onStickerClicked");
+                Log.d(APP_TAG, "onStickerClicked");
             }
 
             @Override
             public void onStickerDeleted(@NonNull Sticker sticker) {
-                Log.d(TAG, "onStickerDeleted");
+                Log.d(APP_TAG, "onStickerDeleted");
             }
 
             @Override
             public void onStickerDragFinished(@NonNull Sticker sticker) {
-                Log.d(TAG, "onStickerDragFinished");
+                Log.d(APP_TAG, "onStickerDragFinished");
             }
 
             @Override
             public void onStickerTouchedDown(@NonNull Sticker sticker) {
-                Log.d(TAG, "onStickerTouchedDown");
+                Log.d(APP_TAG, "onStickerTouchedDown");
             }
 
             @Override
             public void onStickerZoomFinished(@NonNull Sticker sticker) {
-                Log.d(TAG, "onStickerZoomFinished");
+                Log.d(APP_TAG, "onStickerZoomFinished");
             }
 
             @Override
             public void onStickerFlipped(@NonNull Sticker sticker) {
-                Log.d(TAG, "onStickerFlipped");
+                Log.d(APP_TAG, "onStickerFlipped");
             }
 
             @Override
             public void onStickerDoubleTapped(@NonNull Sticker sticker) {
-                Log.d(TAG, "onDoubleTapped: double tap will be with two click");
+                Log.d(APP_TAG, "onDoubleTapped: double tap will be with two click");
             }
         });
 
-        if (toolbar != null) {
-            toolbar.setTitle(R.string.app_name);
-            toolbar.inflateMenu(R.menu.menu_save);
-            toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    if (item.getItemId() == R.id.item_save) {
-                        File file = FileUtil.getNewFile(MainActivity.this, "Sticker");
-                        if (file != null) {
-                            stickerView.save(file);
-                            Toast.makeText(MainActivity.this, "saved in " + file.getAbsolutePath(),
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(MainActivity.this, "the file is null", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    //                    stickerView.replace(new DrawableSticker(
-                    //                            ContextCompat.getDrawable(MainActivity.this, R.drawable.haizewang_90)
-                    //                    ));
-                    return false;
-                }
-            });
-        }
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED
-                || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERM_RQST_CODE);
-        } else {
-            loadSticker();
-        }
+//        if (toolbar != null) {
+//            toolbar.setTitle(R.string.app_name);
+//            toolbar.inflateMenu(R.menu.menu_save);
+//            toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+//                @Override
+//                public boolean onMenuItemClick(MenuItem item) {
+//                    if (item.getItemId() == R.id.item_save) {
+//                        File file = FileUtil.getNewFile(MainActivity.this, "Sticker");
+//                        if (file != null) {
+//                            stickerView.save(file);
+//                            Toast.makeText(MainActivity.this, "saved in " + file.getAbsolutePath(),
+//                                    Toast.LENGTH_SHORT).show();
+//                        } else {
+//                            Toast.makeText(MainActivity.this, "the file is null", Toast.LENGTH_SHORT).show();
+//                        }
+//                    }
+//                    //                    stickerView.replace(new DrawableSticker(
+//                    //                            ContextCompat.getDrawable(MainActivity.this, R.drawable.haizewang_90)
+//                    //                    ));
+//                    return false;
+//                }
+//            });
     }
+
+//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED
+//                || ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+//                != PackageManager.PERMISSION_GRANTED) {
+//            ActivityCompat.requestPermissions(this,
+//                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, PERM_RQST_CODE);
+//        } else {
+//            loadSticker();
+//        }
+
 
     private void loadSticker() {
         Drawable drawable =

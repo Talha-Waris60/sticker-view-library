@@ -61,7 +61,7 @@ public class StickerView extends FrameLayout {
     }
 
     @IntDef(flag = true, value = { FLIP_HORIZONTALLY, FLIP_VERTICALLY })
-    @Retention(RetentionPolicy.SOURCE) protected @interface Flip {
+    @Retention(RetentionPolicy.SOURCE) public @interface Flip {
     }
 
     private static final String TAG = "StickerView";

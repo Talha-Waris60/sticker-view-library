@@ -4,8 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -13,14 +11,12 @@ import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
-import android.widget.Toolbar;
 
 
 import com.example.stickerviewapplication.R;
 import com.example.stickerviewapplication.events.DeleteIconEvent;
 import com.example.stickerviewapplication.events.FlipHorizontallyEvent;
-import com.example.stickerviewapplication.events.HelloIconEvent;
+import com.example.stickerviewapplication.events.RotateIconEvent;
 import com.example.stickerviewapplication.events.ZoomIconEvent;
 import com.example.stickerviewapplication.stickerview.BitmapStickerIcon;
 import com.example.stickerviewapplication.stickerview.DrawableSticker;
@@ -34,7 +30,9 @@ public class MainActivity extends AppCompatActivity {
     public static final String APP_TAG = "StickerView-App";
     private StickerView stickerView;
     private Sticker stickerPerson;
-    private Button buttonNext;
+    private Button buttonNext, buttonAdd;
+
+    private TextSticker stickertext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         stickerView = (StickerView) findViewById(R.id.sticker_view);
+        buttonAdd = findViewById(R.id.aadd);
        // buttonNext = findViewById(R.id.next);
 
         loadSticker();
@@ -54,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
     private void stickerViewIconsAndEvents() {
         //currently you can config your own icons and icon event
         //the event you can custom
-        BitmapStickerIcon deleteIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_close),
+        BitmapStickerIcon deleteIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_delete),
                 BitmapStickerIcon.LEFT_TOP);
         deleteIcon.setIconEvent(new DeleteIconEvent());
 
         BitmapStickerIcon zoomIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_zoom),
-                BitmapStickerIcon.RIGHT_BOTOM);
+                BitmapStickerIcon.RIGHT_BOTTOM);
         zoomIcon.setIconEvent(new ZoomIconEvent());
 
         BitmapStickerIcon flipIcon = new BitmapStickerIcon(ContextCompat.getDrawable(this,
@@ -67,14 +66,14 @@ public class MainActivity extends AppCompatActivity {
                 BitmapStickerIcon.RIGHT_TOP);
         flipIcon.setIconEvent(new FlipHorizontallyEvent());
 
-//        BitmapStickerIcon heartIcon =
-//                new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_heart),
-//                        BitmapStickerIcon.LEFT_BOTTOM);
-//        heartIcon.setIconEvent(new HelloIconEvent());
+        BitmapStickerIcon rotateIcon =
+                new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_rotation),
+                        BitmapStickerIcon.LEFT_BOTTOM);
+        rotateIcon.setIconEvent(new RotateIconEvent());
 
         stickerView.setConstrained(true);
 
-        stickerView.setIcons(Arrays.asList(deleteIcon, zoomIcon, flipIcon));
+        stickerView.setIcons(Arrays.asList(deleteIcon, zoomIcon, flipIcon, rotateIcon));
 
     }
 
@@ -89,6 +88,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
+        // Add new Sticker
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               loadSticker();
+            }
+        });
+
         // touch listener on StickerView
         stickerView.setOnStickerOperationListener(new StickerView.OnStickerOperationListener() {
             @Override
@@ -100,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
             public void onStickerClicked(@NonNull Sticker sticker) {
                 //stickerView.removeAllSticker();
                 if (sticker instanceof TextSticker) {
-                    ((TextSticker) sticker).setTextColor(Color.RED);
                     stickerView.replace(sticker);
                     stickerView.invalidate();
                 }
@@ -142,12 +148,19 @@ public class MainActivity extends AppCompatActivity {
 
     // load Sticker
     private void loadSticker() {
-        Drawable drawable =
-                ContextCompat.getDrawable(this, R.drawable.ic_weightlifter);
-        Drawable drawable1 =
-                ContextCompat.getDrawable(this, R.drawable.ic_milk_box);
+     /*  Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_weightlifter);
+        Drawable drawable1 = ContextCompat.getDrawable(this, R.drawable.ic_milk_box);
         stickerPerson = new DrawableSticker(drawable);
-        stickerView.addSticker(stickerPerson);
+        stickerView.addSticker(stickerPerson);*/
+
+        stickertext = new TextSticker(this);
+        stickertext.setText("Hello, world!");
+        stickertext.setTextAlign(Layout.Alignment.ALIGN_CENTER);
+        stickertext.resizeText();
+
+        stickerView.addSticker(stickertext);
+
+
 
     }
 

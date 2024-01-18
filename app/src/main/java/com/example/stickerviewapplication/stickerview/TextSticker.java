@@ -1,5 +1,7 @@
 package com.example.stickerviewapplication.stickerview;
 
+import static com.example.stickerviewapplication.activities.MainActivity.APP_TAG;
+
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -9,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.util.Log;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.Dimension;
@@ -18,8 +21,8 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.example.stickerviewapplication.R;
-
-public class TextSticker extends Sticker{
+import com.example.stickerviewapplication.activities.MainActivity;
+public class TextSticker extends Sticker {
 
     /**
      * Our ellipsis string.
@@ -64,8 +67,7 @@ public class TextSticker extends Sticker{
         this.context = context;
         this.drawable = drawable;
         if (drawable == null) {
-            this.drawable = ContextCompat.getDrawable(context, R
-                    .drawable.ic_weightlifter);
+            this.drawable = ContextCompat.getDrawable(context, R.drawable.sticker_transparent_background);
         }
         textPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
         realBounds = new Rect(0, 0, getWidth(), getHeight());
@@ -194,7 +196,6 @@ public class TextSticker extends Sticker{
      * Resize this view's text size with respect to its width and height
      * (minus padding). You should always call this method after the initialization.
      */
-
     @NonNull public TextSticker resizeText() {
         final int availableHeightPixels = textRect.height();
 
@@ -278,7 +279,6 @@ public class TextSticker extends Sticker{
         return minTextSizePixels;
     }
 
-
     /**
      * Sets the text size of a clone of the view's {@link TextPaint} object
      * and uses a {@link StaticLayout} instance to measure the height of the text.
@@ -287,7 +287,6 @@ public class TextSticker extends Sticker{
      * with the specified width
      * and when the text has the specified size.
      */
-
     protected int getTextHeightPixels(@NonNull CharSequence source, int availableWidthPixels,
                                       float textSizePixels) {
         textPaint.setTextSize(textSizePixels);
@@ -306,5 +305,4 @@ public class TextSticker extends Sticker{
     private float convertSpToPx(float scaledPixels) {
         return scaledPixels * context.getResources().getDisplayMetrics().scaledDensity;
     }
-
 }

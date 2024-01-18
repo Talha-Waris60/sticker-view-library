@@ -1,8 +1,11 @@
 package com.example.stickerviewapplication.stickerview;
 
+import static com.example.stickerviewapplication.activities.MainActivity.APP_TAG;
+
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 
 import androidx.annotation.IntRange;
@@ -13,6 +16,7 @@ import androidx.annotation.NonNull;
  */
 public class DrawableSticker extends Sticker {
 
+
     private Drawable drawable;
     private Rect realBounds;
 
@@ -21,8 +25,7 @@ public class DrawableSticker extends Sticker {
         realBounds = new Rect(0, 0, getWidth(), getHeight());
     }
 
-    @NonNull
-    @Override public Drawable getDrawable() {
+    @NonNull @Override public Drawable getDrawable() {
         return drawable;
     }
 
@@ -44,8 +47,10 @@ public class DrawableSticker extends Sticker {
         return this;
     }
 
-    @Override public int getWidth() {
+    @Override
+    public int getWidth() {
         return drawable.getIntrinsicWidth();
+
     }
 
     @Override public int getHeight() {

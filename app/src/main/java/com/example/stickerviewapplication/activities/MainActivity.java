@@ -44,8 +44,10 @@ public class MainActivity extends AppCompatActivity {
         buttonTextSticker = findViewById(R.id.add_text_Sticker);
         buttonImageSticker = findViewById(R.id.add_image_sticker);
 
-        Canvas canvas = new Canvas();
-        stickerView.drawAlignmentGuides(canvas);
+
+  /*      Canvas canvas = new Canvas();
+        stickerView.drawAlignmentGuides(canvas);*/
+
         loadTextSticker();
         setUpListener();
         stickerViewIconsAndEvents();
@@ -136,8 +138,14 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
+            public void onStickerDrag(@NonNull Sticker sticker) {
+                Log.d(APP_TAG, "onDrag");
+            }
+
+            @Override
             public void onStickerTouchedDown(@NonNull Sticker sticker) {
                 Log.d(APP_TAG, "onStickerTouchedDown");
+
             }
 
             @Override

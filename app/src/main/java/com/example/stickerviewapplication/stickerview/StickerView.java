@@ -48,10 +48,18 @@ public class StickerView extends FrameLayout {
 
     private boolean showIcons;
     private boolean showBorder;
+
+    private boolean showStaticLines = false;
     private final boolean bringToFrontCurrentSticker;
 
     private Paint verticalLinePaint;
     private Paint horizontalLinePaint;
+
+    private Paint alignmentLinePaint;
+    private float touchX, touchY;
+    private Paint staticAlignmentLinePaint;
+
+    // Add variables to store the position of the dragged sticker
 
 
     @IntDef({
@@ -212,19 +220,27 @@ public class StickerView extends FrameLayout {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
         drawStickers(canvas);
-        drawAlignmentGuides(canvas);
+
     }
 
-    // TODO: New method to show border frame
-    public void showBorder(boolean show) {
-        showBorder = show;
-        invalidate();
-    }
+    private void drawAlignmentLines(Canvas canvas) {
 
-    // TODO: New method to remove border frame
-    public void removeBorder() {
-        showBorder = false;
-        invalidate();
+        // Draw static vertical alignment line
+        float staticAlignmentX = getWidth() / 2f; // Adjust as needed
+        float staticAlignmentY = getHeight() / 2f;
+
+        // Draw static lines only when showStaticLines is true
+        if (showStaticLines) {
+            // Draw static vertical alignment line
+            canvas.drawLine(staticAlignmentX, 0, staticAlignmentX, getHeight(), staticAlignmentLinePaint);
+            canvas.drawLine(0, staticAlignmentY, getWidth(), staticAlignmentY, staticAlignmentLinePaint);
+        }
+
+        // Draw dynamic vertical alignment line
+        canvas.drawLine(touchX, 0, touchX, getHeight(), alignmentLinePaint);
+
+        // Draw dynamic horizontal alignment line
+        canvas.drawLine(0, touchY, getWidth(), touchY, alignmentLinePaint);
     }
 
     public boolean isPointInsideStickerBounds(@NonNull Sticker sticker, float x, float y) {
@@ -232,7 +248,7 @@ public class StickerView extends FrameLayout {
     }
 
     protected void drawStickers(Canvas canvas) {
-        borderPaint.setColor(Color.BLACK    );
+        borderPaint.setColor(Color.BLACK);
         borderPaint.setShadowLayer(5, 0, 0, borderPaint.getColor());
         for (int i = 0; i < stickers.size(); i++) {
             Sticker sticker = stickers.get(i);
@@ -268,7 +284,6 @@ public class StickerView extends FrameLayout {
                     BitmapStickerIcon icon = icons.get(i);
                     switch (icon.getPosition()) {
                         case BitmapStickerIcon.LEFT_TOP:
-
                             configIconMatrix(icon, x1, y1, rotation);
                             break;
 
@@ -285,6 +300,7 @@ public class StickerView extends FrameLayout {
                             break;
                     }
                     icon.draw(canvas, borderPaint);
+                    drawAlignmentLines(canvas);
                 }
             }
         }
@@ -324,6 +340,7 @@ public class StickerView extends FrameLayout {
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 if (!onTouchDown(event)) {
+                    showStaticLines = true;
                      invalidate();
                 }
                 break;
@@ -340,11 +357,17 @@ public class StickerView extends FrameLayout {
 
             case MotionEvent.ACTION_MOVE:
                 handleCurrentMode(event);
+                touchX = event.getX();
+                touchY = event.getY();
                 invalidate();
                 break;
 
             case MotionEvent.ACTION_UP:
                 onTouchUp(event);
+                showStaticLines = false;
+                touchX = -1;
+                touchY = -1;
+                invalidate();
                 break;
 
             case MotionEvent.ACTION_POINTER_UP:
@@ -367,6 +390,7 @@ public class StickerView extends FrameLayout {
      */
     protected boolean onTouchDown(@NonNull MotionEvent event) {
         currentMode = ActionMode.DRAG;
+        showStaticLines = true;
 
         downX = event.getX();
         downY = event.getY();
@@ -403,7 +427,6 @@ public class StickerView extends FrameLayout {
 
     protected void onTouchUp(@NonNull MotionEvent event) {
         long currentTime = SystemClock.uptimeMillis();
-
         if (currentMode == ActionMode.ICON && currentIcon != null && handlingSticker != null) {
             currentIcon.onActionUp(this, event);
         }
@@ -428,7 +451,6 @@ public class StickerView extends FrameLayout {
                 onStickerOperationListener.onStickerDragFinished(handlingSticker);
             }
         }
-
         currentMode = ActionMode.NONE;
         lastClickTime = currentTime;
     }
@@ -704,28 +726,16 @@ public class StickerView extends FrameLayout {
     }
 
     private void initAlignmentLinesColor() {
-        // For Vertical line
-        verticalLinePaint = new Paint();
-        verticalLinePaint.setColor(Color.RED);
-        verticalLinePaint.setStrokeWidth(2);
+        alignmentLinePaint = new Paint();
+        alignmentLinePaint.setColor(Color.RED);
+        alignmentLinePaint.setStrokeWidth(2);
 
-        // For horizontal line
-        horizontalLinePaint = new Paint();
-        horizontalLinePaint.setColor(Color.RED);
-        horizontalLinePaint.setStrokeWidth(2);
+
+        staticAlignmentLinePaint = new Paint();
+        staticAlignmentLinePaint.setColor(Color.BLUE);
+        staticAlignmentLinePaint.setStrokeWidth(2);
     }
 
-    // For alignment guides
-    public void drawAlignmentGuides(@NonNull Canvas canvas) {
-        // Draw vertical line
-        float centerX = canvas.getWidth() / 2f;
-        canvas.drawLine(centerX, 0, centerX, canvas.getHeight(), verticalLinePaint);
-
-        // Draw horizontal line
-        float centerY = canvas.getHeight() / 2f;
-        canvas.drawLine(0, centerY, canvas.getWidth(), centerY, horizontalLinePaint);
-
-    }
 
     public boolean replace(@Nullable Sticker sticker) {
         return replace(sticker, true);
@@ -970,6 +980,8 @@ public class StickerView extends FrameLayout {
         void onStickerDeleted(@NonNull Sticker sticker);
 
         void onStickerDragFinished(@NonNull Sticker sticker);
+
+        void onStickerDrag(@NonNull Sticker sticker);
 
         void onStickerTouchedDown(@NonNull Sticker sticker);
 

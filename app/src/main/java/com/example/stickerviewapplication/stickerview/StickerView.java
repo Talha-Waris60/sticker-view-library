@@ -308,13 +308,14 @@
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
                     if (!onTouchDown(event)) {
+
                         return false;
                     }
                     break;
                 case MotionEvent.ACTION_POINTER_DOWN:
                     oldDistance = calculateDistance(event);
                     oldRotation = calculateRotation(event);
-
+                    Log.d(APP_TAG, "2");
                     midPoint = calculateMidPoint(event);
 
                     if (handlingSticker != null && isInStickerArea(handlingSticker, event.getX(1),

@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Layout;
@@ -30,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String APP_TAG = "StickerView-App";
     private StickerView stickerView;
     private Sticker stickerPerson;
-    private Button buttonNext, buttonAdd;
+    private Button buttonNext, buttonTextSticker, buttonImageSticker;
 
     private TextSticker stickertext;
 
@@ -40,10 +39,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         stickerView = (StickerView) findViewById(R.id.sticker_view);
-        buttonAdd = findViewById(R.id.aadd);
-       // buttonNext = findViewById(R.id.next);
+        buttonTextSticker = findViewById(R.id.add_text_Sticker);
+        buttonImageSticker = findViewById(R.id.add_image_sticker);
 
-        loadSticker();
+        loadTextSticker();
         setUpListener();
         stickerViewIconsAndEvents();
 
@@ -89,10 +88,17 @@ public class MainActivity extends AppCompatActivity {
         });*/
 
         // Add new Sticker
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
+        buttonTextSticker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               loadSticker();
+               loadTextSticker();
+            }
+        });
+
+        buttonImageSticker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loadImageSticker();
             }
         });
 
@@ -147,14 +153,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // load Sticker
-    private void loadSticker() {
-     /*  Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_weightlifter);
-        Drawable drawable1 = ContextCompat.getDrawable(this, R.drawable.ic_milk_box);
-        stickerPerson = new DrawableSticker(drawable);
-        stickerView.addSticker(stickerPerson);*/
-
+    private void loadTextSticker() {
         stickertext = new TextSticker(this);
-        stickertext.setText("Hello, world!");
+        stickertext.setText("Cake");
         stickertext.setTextAlign(Layout.Alignment.ALIGN_CENTER);
         stickertext.resizeText();
 
@@ -162,6 +163,13 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void loadImageSticker() {
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_cake);
+        Drawable drawable1 = ContextCompat.getDrawable(this, R.drawable.ic_milk_box);
+        stickerPerson = new DrawableSticker(drawable);
+        stickerView.addSticker(stickerPerson);
     }
 
 /*

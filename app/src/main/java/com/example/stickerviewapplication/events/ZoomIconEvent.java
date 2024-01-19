@@ -10,7 +10,6 @@ import com.example.stickerviewapplication.stickerview.StickerView;
 public class ZoomIconEvent implements StickerIconEvent {
     @Override
     public void onActionDown(StickerView stickerView, MotionEvent event) {
-
         Log.d(APP_TAG, "1");
     }
 
@@ -18,6 +17,7 @@ public class ZoomIconEvent implements StickerIconEvent {
     public void onActionMove(StickerView stickerView, MotionEvent event) {
         stickerView.zoomCurrentSticker(event);
         Log.d(APP_TAG, "2");
+
     }
 
     @Override

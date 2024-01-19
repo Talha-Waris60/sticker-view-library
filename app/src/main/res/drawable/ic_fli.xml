@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<!-- Elevation (shadow) -->
+<item android:right="1dp" android:left="1dp" android:top="1dp" android:bottom="1dp">
+    <shape android:shape="oval">
+        <solid android:color="#949391" />
+        <padding android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="2dp" />
+    </shape>
+</item>
+<!-- Icon (replace this with your actual icon) -->
+<item android:drawable="@drawable/ic_flip" android:gravity="center" />
+</layer-list>

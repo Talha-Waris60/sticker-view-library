@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.Layout;
@@ -15,6 +16,7 @@ import android.widget.Button;
 import com.example.stickerviewapplication.R;
 import com.example.stickerviewapplication.events.DeleteIconEvent;
 import com.example.stickerviewapplication.events.FlipHorizontallyEvent;
+import com.example.stickerviewapplication.events.FlipVerticallyEvent;
 import com.example.stickerviewapplication.events.RotateIconEvent;
 import com.example.stickerviewapplication.events.ZoomIconEvent;
 import com.example.stickerviewapplication.stickerview.BitmapStickerIcon;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
         buttonTextSticker = findViewById(R.id.add_text_Sticker);
         buttonImageSticker = findViewById(R.id.add_image_sticker);
 
+        Canvas canvas = new Canvas();
+        stickerView.drawAlignmentGuides(canvas);
         loadTextSticker();
         setUpListener();
         stickerViewIconsAndEvents();
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 R.drawable.ic_flip),
                 BitmapStickerIcon.RIGHT_TOP);
         flipIcon.setIconEvent(new FlipHorizontallyEvent());
+
 
         BitmapStickerIcon rotateIcon =
                 new BitmapStickerIcon(ContextCompat.getDrawable(this, R.drawable.ic_rotation),
@@ -143,6 +148,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onStickerFlipped(@NonNull Sticker sticker) {
                 Log.d(APP_TAG, "onStickerFlipped");
+
             }
 
             @Override

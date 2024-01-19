@@ -43,7 +43,7 @@ public class BitmapStickerIcon extends DrawableSticker implements StickerIconEve
     }
 
     public void draw(Canvas canvas, Paint paint) {
-        // canvas.drawCircle(x, y, iconRadius, paint);  - TODO: Give icon background and color
+        canvas.drawCircle(x, y, iconRadius, paint);   // - TODO: Give icon background and color
         super.draw(canvas);
     }
 

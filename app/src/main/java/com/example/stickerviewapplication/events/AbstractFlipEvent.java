@@ -17,6 +17,7 @@ public abstract class AbstractFlipEvent implements StickerIconEvent {
     }
 
     @Override public void onActionUp(StickerView stickerView, MotionEvent event) {
+      
         stickerView.flipCurrentSticker(getFlipDirection());
     }
 

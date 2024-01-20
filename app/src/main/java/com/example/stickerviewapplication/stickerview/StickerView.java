@@ -48,8 +48,8 @@ public class StickerView extends FrameLayout {
 
     private boolean showIcons;
     private boolean showBorder;
-
     private boolean showStaticLines = false;
+    private boolean isDynamicLinesShowing = false;
     private final boolean bringToFrontCurrentSticker;
 
     private Paint verticalLinePaint;
@@ -223,6 +223,7 @@ public class StickerView extends FrameLayout {
 
     }
 
+    /** Draw Alignment lines **/
     private void drawAlignmentLines(Canvas canvas) {
 
         // Draw static vertical alignment line
@@ -230,17 +231,24 @@ public class StickerView extends FrameLayout {
         float staticAlignmentY = getHeight() / 2f;
 
         // Draw static lines only when showStaticLines is true
-        if (showStaticLines) {
+        if (showStaticLines  && (currentMode == ActionMode.DRAG)) {
             // Draw static vertical alignment line
             canvas.drawLine(staticAlignmentX, 0, staticAlignmentX, getHeight(), staticAlignmentLinePaint);
             canvas.drawLine(0, staticAlignmentY, getWidth(), staticAlignmentY, staticAlignmentLinePaint);
+
+        }
+        if (handlingSticker != null && (currentMode == ActionMode.DRAG || currentMode == ActionMode.ZOOM_WITH_TWO_FINGER)) {
+            float[] stickerPoints = getStickerPoints(handlingSticker);
+            float centerX = (stickerPoints[0] + stickerPoints[6]) / 2;
+            float centerY = (stickerPoints[3] + stickerPoints[5]) / 2;
+
+            // Draw dynamic vertical alignment line from the center
+            canvas.drawLine(centerX, 0, centerX, getHeight(), alignmentLinePaint);
+
+            // Draw dynamic horizontal alignment line from the center
+            canvas.drawLine(0, centerY, getWidth(), centerY, alignmentLinePaint);
         }
 
-        // Draw dynamic vertical alignment line
-        canvas.drawLine(touchX, 0, touchX, getHeight(), alignmentLinePaint);
-
-        // Draw dynamic horizontal alignment line
-        canvas.drawLine(0, touchY, getWidth(), touchY, alignmentLinePaint);
     }
 
     public boolean isPointInsideStickerBounds(@NonNull Sticker sticker, float x, float y) {

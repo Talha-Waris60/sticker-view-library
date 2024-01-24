@@ -12,6 +12,8 @@ import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.stickerviewapplication.enums.StickerType;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -39,6 +41,8 @@ public abstract class Sticker {
     private final Matrix matrix = new Matrix();
     private boolean isFlippedHorizontally;
     private boolean isFlippedVertically;
+
+    private StickerType stickerType;
 
     public boolean isFlippedHorizontally() {
         return isFlippedHorizontally;
@@ -69,6 +73,7 @@ public abstract class Sticker {
 
     public abstract void draw(@NonNull Canvas canvas);
 
+
     public abstract int getWidth();
 
     public abstract int getHeight();
@@ -84,6 +89,10 @@ public abstract class Sticker {
         getBoundPoints(points);
         return points;
     }
+
+    // Set and return the type of Sticker
+    public abstract StickerType getStickerType();
+
 
     public void getBoundPoints(@NonNull float[] points) {
         if (!isFlippedHorizontally) {

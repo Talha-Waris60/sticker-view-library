@@ -22,6 +22,8 @@ import androidx.core.content.ContextCompat;
 
 import com.example.stickerviewapplication.R;
 import com.example.stickerviewapplication.activities.MainActivity;
+import com.example.stickerviewapplication.enums.StickerType;
+
 public class TextSticker extends Sticker {
 
     /**
@@ -121,6 +123,11 @@ public class TextSticker extends Sticker {
     @NonNull @Override public TextSticker setAlpha(@IntRange(from = 0, to = 255) int alpha) {
         textPaint.setAlpha(alpha);
         return this;
+    }
+
+    @Override
+    public StickerType getStickerType() {
+        return StickerType.TEXT;
     }
 
     @NonNull @Override public Drawable getDrawable() {

@@ -7,12 +7,21 @@
     tools:context=".activities.MainActivity"
     android:orientation="vertical">
 
+    <ImageView
+        android:id="@+id/ic_layer"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_layer"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"/>
 
     <com.example.stickerviewapplication.stickerview.StickerView
         android:id="@+id/sticker_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
+        android:layout_below="@+id/ic_layer"
         app:showBorder="true"
         app:showIcons="true"
         android:layout_above="@id/add_text_Sticker">
@@ -31,6 +40,7 @@
         android:layout_marginBottom="30dp"
         android:layout_marginEnd="30dp"
         />
+
     <Button
         android:id="@+id/add_image_sticker"
         android:layout_width="wrap_content"

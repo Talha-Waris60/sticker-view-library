@@ -1,5 +1,6 @@
 package com.example.stickerviewapplication.stickerview;
 
+import static android.content.Context.LOCALE_SERVICE;
 import static com.example.stickerviewapplication.activities.MainActivity.APP_TAG;
 
 import android.content.Context;
@@ -30,6 +31,7 @@ import com.example.stickerviewapplication.R;
 import com.example.stickerviewapplication.events.DeleteIconEvent;
 import com.example.stickerviewapplication.events.FlipHorizontallyEvent;
 import com.example.stickerviewapplication.events.ZoomIconEvent;
+import com.example.stickerviewapplication.model.StickerModel;
 
 import java.io.File;
 import java.lang.annotation.Retention;
@@ -37,6 +39,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -223,7 +226,9 @@ public class StickerView extends FrameLayout {
 
     }
 
-    /** Draw Alignment lines **/
+    /**
+     * Draw Alignment lines
+     **/
     private void drawAlignmentLines(Canvas canvas) {
 
         // Draw static vertical alignment line
@@ -231,7 +236,7 @@ public class StickerView extends FrameLayout {
         float staticAlignmentY = getHeight() / 2f;
 
         // Draw static lines only when showStaticLines is true
-        if (showStaticLines  && (currentMode == ActionMode.DRAG)) {
+        if (showStaticLines && (currentMode == ActionMode.DRAG)) {
             // Draw static vertical alignment line
             canvas.drawLine(staticAlignmentX, 0, staticAlignmentX, getHeight(), staticAlignmentLinePaint);
             canvas.drawLine(0, staticAlignmentY, getWidth(), staticAlignmentY, staticAlignmentLinePaint);
@@ -250,6 +255,30 @@ public class StickerView extends FrameLayout {
         }
 
     }
+
+    public List<Sticker> getStickers() {
+        return stickers;
+    }
+
+
+    // TODO: Sample
+    public Sticker getSticker(int position) {
+        if (position >= 0 && position < stickers.size()) {
+            return stickers.get(position);
+        }
+        return null;
+    }
+
+   // TODO: Sample
+
+    public void moveStickerToLayer(@NonNull ArrayList<Sticker> sticker) {
+        stickers.clear();
+        Log.d(APP_TAG, "Size - " + stickers.size());
+        stickers.addAll(sticker);
+        Log.d(APP_TAG, "After Size - " + stickers.size());
+        invalidate();
+    }
+
 
     public boolean isPointInsideStickerBounds(@NonNull Sticker sticker, float x, float y) {
         return sticker != null && isInStickerArea(sticker, x, y);
@@ -349,7 +378,7 @@ public class StickerView extends FrameLayout {
             case MotionEvent.ACTION_DOWN:
                 if (!onTouchDown(event)) {
                     showStaticLines = true;
-                     invalidate();
+                    invalidate();
                 }
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
@@ -820,8 +849,7 @@ public class StickerView extends FrameLayout {
         return addSticker(sticker, Sticker.Position.CENTER);
     }
 
-    public StickerView addSticker(@NonNull final Sticker sticker,
-                                  final @Sticker.Position int position) {
+    public StickerView addSticker(@NonNull final Sticker sticker, final @Sticker.Position int position) {
         if (ViewCompat.isLaidOut(this)) {
             addStickerImmediately(sticker, position);
         } else {

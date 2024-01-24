@@ -11,6 +11,8 @@ import android.util.Log;
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 
+import com.example.stickerviewapplication.enums.StickerType;
+
 /**
  * @author wupanjie
  */
@@ -45,6 +47,11 @@ public class DrawableSticker extends Sticker {
     @NonNull @Override public DrawableSticker setAlpha(@IntRange(from = 0, to = 255) int alpha) {
         drawable.setAlpha(alpha);
         return this;
+    }
+
+    @Override
+    public StickerType getStickerType() {
+        return StickerType.IMAGE;
     }
 
     @Override

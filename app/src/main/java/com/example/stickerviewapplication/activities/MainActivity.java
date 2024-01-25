@@ -43,8 +43,8 @@ import java.util.Collections;
 public class MainActivity extends AppCompatActivity {
     public static final String APP_TAG = "StickerView-App";
     private StickerView stickerView;
-    private Sticker stickerPerson;
-    private Button buttonNext, buttonTextSticker, buttonImageSticker;
+    private Sticker stickerPerson, milkSticker;
+    private Button buttonNext, buttonTextSticker, buttonImageSticker, buttonMilkSticker;
 
     ImageView layerImage;
     RecyclerView dialogRecyclerView;
@@ -63,9 +63,10 @@ public class MainActivity extends AppCompatActivity {
         stickerView = (StickerView) findViewById(R.id.sticker_view);
         buttonTextSticker = findViewById(R.id.add_text_Sticker);
         buttonImageSticker = findViewById(R.id.add_image_sticker);
+        buttonMilkSticker = findViewById(R.id.add_image_sticker_milk);
         layerImage = findViewById(R.id.ic_layer);
 
-        loadTextSticker();
+      //  loadTextSticker();
         setUpListener();
         stickerViewIconsAndEvents();
 
@@ -112,6 +113,13 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             });*/
+
+            buttonMilkSticker.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    loadMilkSticker();
+                }
+            });
 
             layerImage.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -193,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        // remove the sticker from list
+    // remove the sticker from list
         private void removeStickerFromList(Sticker sticker) {
             // Iterate through the stickerList to find and remove the corresponding StickerModel
             for (StickerModel stickerModel : stickerList) {
@@ -218,20 +226,29 @@ public class MainActivity extends AppCompatActivity {
 
         private void loadImageSticker() {
             Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_cake);
-            Drawable drawable1 = ContextCompat.getDrawable(this, R.drawable.ic_milk_box);
             stickerPerson = new DrawableSticker(drawable);
             stickerList.add(0,new StickerModel(StickerModel.TYPE_IMAGE, stickerPerson));
             stickerView.addSticker(stickerPerson);
         }
 
-        private void showRecyclerViewDialogBox() {
+
+    private void loadMilkSticker() {
+
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_milk_box);
+        milkSticker = new DrawableSticker(drawable);
+        stickerList.add(0,new StickerModel(StickerModel.TYPE_IMAGE, milkSticker));
+        stickerView.addSticker(milkSticker);
+    }
+
+    private void showRecyclerViewDialogBox() {
 
             Log.d(APP_TAG, "List - " + stickerView.getStickers().size());
             Log.d(APP_TAG, "StickerViewList 0 - " + stickerView.getStickers().get(0).getStickerType());
             Log.d(APP_TAG, "StickerViewList 1 - "  + stickerView.getStickers().get(1).getStickerType());
+            Log.d(APP_TAG, "StickerViewList 2 - "  + stickerView.getStickers().get(2).getStickerType());
 
             Log.d(APP_TAG, "Main 0 - " + stickerList.get(0).getSticker());
-            Log.d(APP_TAG, "Main 1 - "  + stickerList.get(1).getSticker());
+        //      Log.d(APP_TAG, "Main 1 - "  + stickerList.get(1).getSticker());
 //            Log.d(APP_TAG, "Postion 2 - "  + stickerList.get(2).getType());
 
             LayoutInflater inflater = getLayoutInflater();
@@ -284,7 +301,7 @@ public class MainActivity extends AppCompatActivity {
 
                             newStickerList.clear();
                             for (StickerModel stickerModel : stickerList) {
-                                newStickerList.add(stickerModel.getSticker());
+                                newStickerList.add(0,stickerModel.getSticker());
                             }
                             stickerView.moveStickerToLayer(newStickerList);
                             return true;

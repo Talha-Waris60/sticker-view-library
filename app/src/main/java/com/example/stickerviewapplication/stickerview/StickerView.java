@@ -269,13 +269,9 @@ public class StickerView extends FrameLayout {
         return null;
     }
 
-   // TODO: Sample
-
     public void moveStickerToLayer(@NonNull ArrayList<Sticker> sticker) {
         stickers.clear();
-        Log.d(APP_TAG, "Size - " + stickers.size());
         stickers.addAll(sticker);
-        Log.d(APP_TAG, "After Size - " + stickers.size());
         invalidate();
     }
 

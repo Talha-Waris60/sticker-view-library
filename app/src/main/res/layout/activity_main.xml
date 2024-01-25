@@ -24,7 +24,7 @@
         android:layout_below="@+id/ic_layer"
         app:showBorder="true"
         app:showIcons="true"
-        android:layout_above="@id/add_text_Sticker">
+        android:layout_above="@id/add_image_sticker_milk">
 
     </com.example.stickerviewapplication.stickerview.StickerView>
 
@@ -37,8 +37,19 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="30dp"
-        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        />
+
+    <Button
+        android:id="@+id/add_image_sticker_milk"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Milk Sticker"
+        android:layout_above="@id/add_image_sticker"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="10dp"
         />
 
     <Button
@@ -46,9 +57,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Image Sticker"
-        android:layout_marginStart="30dp"
+        android:layout_marginStart="10dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="10dp"
         />
 
 
